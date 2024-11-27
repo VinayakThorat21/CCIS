@@ -98,11 +98,14 @@ nano $HADOOP_CONF_DIR/yarn-site.xml
 
 -----------------------------------------------------------------
 
-hdfs namenode -format
+Run again from here:
 
+hdfs namenode -format
+export PDSH_RCMD_TYPE=ssh
 start-dfs.sh
 start-yarn.sh
 jps
+hdfs dfs -ls /
 
 -----------------------------------------------------------------
 nano WordCount.java
@@ -172,7 +175,6 @@ javac -classpath `hadoop classpath` -d /tmp/wordcount WordCount.java
 
 ls /tmp/wordcount
 jar -cvf wordcount.jar -C /tmp/wordcount/ .
-added manifest
 
 ls
 

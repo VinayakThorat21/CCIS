@@ -3,4 +3,10 @@ snap list microstack
 sudo microstack init --auto --control
 sudo snap get microstack config.credential
 
-use keystone for login
+use keystone for login at 10.20.20.1
+
+Error on instance launch:
+sudo adduser microstackuser
+sudo usermod -aG sudo microstackuser
+su - microstackuser
+microstack launch cirros -n MyInstance1
