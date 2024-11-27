@@ -1,0 +1,22 @@
+----------------------------------------------------------
+ nano Dockerfile
+
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y curl
+CMD ["bash"]
+
+----------------------------------------------------------
+
+ sudo docker build -t my-custom-image .
+
+sudo docker images
+
+sudo docker run -it --name vinayak-container my-custom-image
+
+on bash: cat /etc/os-release
+
+on exit: sudo docker ps -a
+
+sudo docker stop vinayak-container
+
+sudo docker commit vinayak-container vinayak-img

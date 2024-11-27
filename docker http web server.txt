@@ -1,0 +1,26 @@
+mkdir simple-web-app
+
+cd simple-web-app/
+
+------------------------------------------------------------
+nano index.html
+
+
+------------------------------------------------------------
+
+nano Dockerfile
+
+
+------------------------------------------------------------
+
+ sudo docker build -t simple-web-app .
+
+sudo docker run -d -p 8085:80 --name simple-web-container-new simple-web-app
+
+go to: localhost:8085 to see index.html output
+
+ sudo docker stop simple-web-container-new simple-web-container-new
+
+sudo docker rm simple-web-container-new
+
+now localhost:8085 will refuse to connect

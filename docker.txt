@@ -1,56 +1,27 @@
-#!/bin/bash
+sudo apt update -y
 
-# Step 1: Update package lists and install prerequisites
-echo "Updating package lists and installing prerequisites..."
-sudo apt update
-sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
 
-# Step 2: Add Docker's official GPG key
-echo "Adding Docker's GPG key..."
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-# Step 3: Add Docker's repository
-echo "Adding Docker repository..."
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable" -y
 
-# Step 4: Install Docker
-echo "Installing Docker..."
-sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io
+sudo apt update -y
 
-# Step 5: Start Docker service
-echo "Starting Docker service..."
+apt-cache policy docker-ce
+
+sudo apt install docker-ce -y
+
+sudo systemctl status docker
+
 sudo systemctl start docker
-sudo systemctl enable docker
 
-# Step 6: Verify Docker installation
-echo "Verifying Docker installation..."
-docker --version
+sudo chmod 777 /var/run/docker.sock
 
-# Step 7: Pull an example Docker image (nginx)
-echo "Pulling the nginx Docker image..."
-sudo chmod 666 /var/run/docker.sock
-docker pull nginx:latest
+docker pull ubuntu
 
-# Step 8: Run a container using the nginx image
-echo "Running an nginx container..."
-docker run -d -p 8080:80 --name my_nginx_container nginx:latest
+docker run -it ubuntu bash
 
-# Step 9: List running containers
-echo "Listing running containers..."
-docker ps -a
+on bash: cat /etc/os-release
 
-# Step 10: Access container logs
-echo "Accessing logs of the nginx container..."
-docker logs my_nginx_container
-
-# Step 11: Stop and remove the container
-echo "Stopping and removing the nginx container..."
-docker stop my_nginx_container
-docker rm my_nginx_container
-
-# Step 12: Clean up unused Docker images
-echo "Cleaning up unused images..."
-docker image prune -f
-
-echo "Docker example script completed successfully!"
+on exit: docker ps -a
