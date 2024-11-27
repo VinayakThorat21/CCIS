@@ -1,0 +1,208 @@
+sudo apt update
+
+sudo apt install openjdk-8-jdk -y
+sudo apt install openssh-server openssh-client -y
+
+java -version
+javac -version
+
+sudo adduser hdoop
+su - hdoop
+
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 0600 ~/.ssh/authorized_keys
+ssh localhost
+
+wget https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+
+tar xzf hadoop-3.3.6.tar.gz
+cd hadoop-3.3.6
+
+-----------------------------------------------------------------
+nano ~/.bashrc
+
+add at the end of file:
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export HADOOP_HOME=$HOME/hadoop-3.3.6
+export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+
+source ~/.bashrc
+
+-----------------------------------------------------------------
+nano $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
+-----------------------------------------------------------------
+
+nano $HADOOP_CONF_DIR/core-site.xml
+
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://localhost:9000</value>
+    </property>
+</configuration>
+
+-----------------------------------------------------------------
+
+nano $HADOOP_CONF_DIR/hdfs-site.xml
+
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+</configuration>
+
+-----------------------------------------------------------------
+
+cp $HADOOP_CONF_DIR/mapred-site.xml.template $HADOOP_CONF_DIR/mapred-site.xml
+nano $HADOOP_CONF_DIR/mapred-site.xml
+
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property>
+        <name>yarn.app.mapreduce.am.env</name>
+        <value>HADOOP_MAPRED_HOME=/home/hdoop/hadoop-3.3.6</value>
+    </property>
+    <property>
+        <name>mapreduce.map.env</name>
+        <value>HADOOP_MAPRED_HOME=/home/hdoop/hadoop-3.3.6</value>
+    </property>
+    <property>
+        <name>mapreduce.reduce.env</name>
+        <value>HADOOP_MAPRED_HOME=/home/hdoop/hadoop-3.3.6</value>
+    </property>
+</configuration>
+
+-----------------------------------------------------------------
+
+nano $HADOOP_CONF_DIR/yarn-site.xml
+
+<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+</configuration>
+
+-----------------------------------------------------------------
+
+hdfs namenode -format
+
+start-dfs.sh
+start-yarn.sh
+jps
+
+-----------------------------------------------------------------
+nano WordCount.java
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+public class WordCount {
+    public static class TokenizerMapper
+            extends Mapper<Object, Text, Text, IntWritable> {
+
+        private final static IntWritable one = new IntWritable(1);
+        private Text word = new Text();
+
+        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+            StringTokenizer itr = new StringTokenizer(value.toString());
+            while (itr.hasMoreTokens()) {
+                word.set(itr.nextToken());
+                context.write(word, one);
+            }
+        }
+    }
+
+    public static class IntSumReducer
+            extends Reducer<Text, IntWritable, Text, IntWritable> {
+
+        private IntWritable result = new IntWritable();
+
+        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+            int sum = 0;
+            for (IntWritable val : values) {
+                sum += val.get();
+            }
+            result.set(sum);
+            context.write(key, result);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+        Job job = Job.getInstance(conf, "word count");
+        job.setJarByClass(WordCount.class);
+        job.setMapperClass(TokenizerMapper.class);
+        job.setCombinerClass(IntSumReducer.class);
+        job.setReducerClass(IntSumReducer.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
+        FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+    }
+}
+
+-----------------------------------------------------------------
+
+mkdir -p /tmp/wordcount
+javac -classpath `hadoop classpath` -d /tmp/wordcount WordCount.java
+
+ls /tmp/wordcount
+jar -cvf wordcount.jar -C /tmp/wordcount/ .
+added manifest
+
+ls
+
+hdfs dfs -mkdir /input
+
+-----------------------------------------------------------------
+nano sample.txt
+
+Hello Hadoop
+Hadoop is a framework
+Hello world
+
+-----------------------------------------------------------------
+
+hdfs dfs -put sample.txt /input
+
+hdfs dfs -ls /input
+
+hadoop jar wordcount.jar WordCount /input /output
+
+hdfs dfs -ls /output
+hdfs dfs -cat /output/part-r-00000
+
+-----------------------------------------------------------------
+On failure:
+hdfs dfsadmin -safemode get (should be OFF)
+hdfs dfsadmin -safemode leave (if ON)
+hdfs dfsadmin -safemode get (will be OFF)
+
+stop-all.sh
+start-all.sh
+jps
+hdfs dfs -rm -r /output

@@ -1,0 +1,39 @@
+Experiment No:-1
+https://www.youtube.com/watch?v=YjG1yG2l9v0
+
+(ISO Image-https://ubuntu.com/download/desktop/thank-you?version=24.04.1&architecture=amd64&lts=true)
+
+Experiment N0:-2
+https://www.youtube.com/watch?v=2Cu-A3SlXPw&pp=ygUnaW1wbGVtZW50YXRpb24gb2YgZG9ja2VyIGluIHZpcnR1YWxib3gg
+
+Experiment No:-3
+https://www.youtube.com/watch?v=KaElIiDXKas&pp=ygUfY3JlYXRlIHN0dWRlbnQgYWNjb3VudCBpbiBBenVyZQ%3D%3D
+Create Default Web App
+
+Experiment N0-4
+https://www.youtube.com/watch?v=ujiJaz2bRII&pp=ygUdZGVwbG95IGZsYXNrIHByb2plY3Qgb24gQXp1cmU%3D
+https://www.youtube.com/watch?v=dXZMbF07hDE&t=284s&pp=ygUlZGVwbG95IGZsYXNrIGFwcCBpbiBhenVyZSB3aXRoIGdpdGh1Yg%3D%3D
+(sample Project -https://github.com/sachit16/Caculator-Using-Flask )
+
+Experiment No-5
+https://www.youtube.com/watch?v=DIR1ccw-eh0&t=4s&pp=ygUjaGFkb29wIDMuMy42IGluc3RhbGxhdGlvbiBvbiB1YnVudHU%3D
+OR
+https://www.youtube.com/watch?v=R_kid1CHuOw
+
+Then Run command  for word count (Wordcount.jar file provided in zip file)
+Experiment No-6
+https://www.youtube.com/watch?v=aIzVSJO8RCE&pp=ygU1SW1wbGVtZW50IEluZnJhc3RydWN0dXJlIGFzIGEgU2VydmljZSB1c2luZyBPcGVuU3RhY2s%3D
+
+Experiment No-7
+
+https://www.youtube.com/watch?v=n4Nx7YD5_mY&t=1060s&pp=ygVLRGVzaWduIGFuZCBkZXZlbG9wIGN1c3RvbSBBcHBsaWNhdGlvbiAoTWluaSBQcm9qZWN0KSB1c2luZyBTYWxlc2ZvcmNlIENsb3Vk
+
+https://www.youtube.com/watch?v=n4Nx7YD5_mY
+
+Experiment No-8
+
+https://www.youtube.com/watch?v=RjGVOFm39j0&t=459s&pp=ygU-SW1wbGVtZW50IOKAnFNvZnR3YXJlIGFzIGEgU2VydmljZeKAnSAoU2FhUykgbW9kZWwgdXNpbmcgQXp1cmU%3D
+
+Experiment No-10
+
+https://www.youtube.com/watch?v=oK4HEIPVaCI

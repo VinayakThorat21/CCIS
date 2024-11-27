@@ -1,0 +1,164 @@
+Exp-2
+sudo apt update -y
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic 
+stable" -y
+sudo apt update -y
+apt-cache policy docker-ce -y
+sudo apt install docker-ce -y
+#sudo systemctl status docker
+sudo chmod 777 /var/run/docker.sock
+docker pull ubuntu
+docker run -it ubuntu bash
+docker ps -a
+Exp-5
+
+1. Prerequisite Test
+=============================
+sudo apt update
+sudo apt install openjdk-8-jdk -y
+java -version; javac -version
+sudo apt install openssh-server openssh-client -y
+sudo adduser hdoop
+su - hdoop
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 0600 ~/.ssh/authorized_keys
+ssh localhost
+2. Downloading Hadoop (Please note link is updated to new version of hadoop here on 6th 
+May 2022)
+===============================
+wget https://downloads.apache.org/hadoop/common/hadoop-3.3.6/hadoop-3.3.6.tar.gz
+tar xzf hadoop-3.3.6.tar.gz
+ cd hadoop-3.3.6/etc/hadoop
+3. Editng 6 important files
+=================================
+• 1st file
+===========================
+sudo nano .bashrc - here you might face issue saying hdoop is not sudo user 
+if this issue comes then
+su - sachit
+sudo adduser hdoop sudo
+sudo nano .bashrc
+#Add below lines in this file
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export PATH=$PATH:/usr/lib/jvm/java-8-openjdk-amd64/bin
+export HADOOP_HOME=~/hadoop-3.3.6/
+export PATH=$PATH:$HADOOP_HOME/bin
+export PATH=$PATH:$HADOOP_HOME/sbin
+export HADOOP_MAPRED_HOME=$HADOOP_HOME
+export YARN_HOME=$HADOOP_HOME
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+export HADOOP_COMMON_LIB_NATIVE_DIR=$HADOOP_HOME/lib/native
+export HADOOP_OPTS="-Djava.library.path=$HADOOP_HOME/lib/native"
+export HADOOP_STREAMING=$HADOOP_HOME/share/hadoop/tools/lib/hadoop-streaming3.3.6.jar
+export HADOOP_LOG_DIR=$HADOOP_HOME/logs
+export PDSH_RCMD_TYPE=ssh
+source ~/.bashrc
+• 2nd File
+============================
+sudo nano hadoop-env.sh
+#Add below line in this file in the end
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 (set the path for JAVA_HOME)
+• 3rd File
+===============================
+sudo nano core-site.xml
+#Add below lines in this file(between "<configuration>" and "<"/configuration>")
+ <configuration>
+<property>
+<name>fs.defaultFS</name>
+<value>hdfs://localhost:9000</value> </property>
+<property>
+<name>hadoop.proxyuser.dataflair.groups</name> <value>*</value>
+</property>
+<property>
+<name>hadoop.proxyuser.dataflair.hosts</name> <value>*</value>
+</property>
+<property>
+<name>hadoop.proxyuser.server.hosts</name> <value>*</value>
+</property>
+<property>
+<name>hadoop.proxyuser.server.groups</name> <value>*</value>
+</property>
+</configuration>
+• 4th File
+====================================
+sudo nano hdfs-site.xml
+#Add below lines in this file(between "<configuration>" and "<"/configuration>")
+<configuration>
+<property>
+<name>dfs.replication</name>
+<value>1</value>
+</property>
+</configuration>
+• 5th File
+================================================
+sudo nano mapred-site.xml
+#Add below lines in this file(between "<configuration>" and "<"/configuration>")
+<configuration>
+<property>
+<name>mapreduce.framework.name</name> <value>yarn</value>
+</property>
+<property>
+<name>mapreduce.application.classpath</name>
+<value>$HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*:$HADOOP_MAPRED_HOME/
+share/hadoop/mapreduce/lib/*</value>
+</property>
+</configuration>
+6th File
+==================================================
+sudo nano yarn-site.xml
+#Add below lines in this file
+<configuration>
+<property>
+<name>yarn.nodemanager.aux-services</name>
+<value>mapreduce_shuffle</value>
+</property>
+<property>
+<name>yarn.nodemanager.env-whitelist</name>
+<value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF
+_DIR,CLASSPATH_PREP 
+END_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
+</property>
+</configuration>
+Launching Hadoop
+==================================
+ssh
+ssh localhost
+ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 0600 ~/.ssh/authorized_keys
+hadoop-3.3.6/bin/hdfs namenode -format
+export PDSH_RCMD_TYPE=ssh
+To start hadoop
+start-all.sh (Start NameNode daemon and DataNode daemon)
+$ hadoop fs -mkdir /sagar
+$ hadoop fs -ls
+
+
+start-dfs.sh
+start-yarn.sh
+jps
+browse - localhost:9870
+hdfs dfs -ls /
+hdfs dfs -mkdir /test
+hdfs dfs -put /home/hadoop/data.txt /test
+hadoop jar  /home/hadoop/WordCount.jar  com.demo.WordCount /test/WCFile  /test2
+hadoop fs -cat /test2/part-r-00000
+
+
+
+Exp-6
+Sudo snap install microstack –beta
+Snap list microstack
+Sudo microstack init –auto –control
+
+-----goto->10.20.20.1
+Lointid-admin
+Password-
+sudo snap get microstack config.credentials
+
+
+microstack launch cirros -n MyVM2  
+
