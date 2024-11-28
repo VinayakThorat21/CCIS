@@ -1,10 +1,11 @@
 //MSAL configuration
 const msalConfig = {
     auth: {
-        clientId: 'eecd27f7-5272-4553-872c-9f0ddfaa4ce1',
+        clientId: 'c8a16b2a-445e-444d-8941-9b1e59e3ca16',
         // comment out if you use a multi-tenant AAD app
         authority: 'https://login.microsoftonline.com/common',
-        redirectUri: 'https://3362-117-239-185-165.ngrok-free.app'
+        redirectUri: 'https://cf77-2401-4900-5130-2a14-d56-7694-ec94-1c90.ngrok-free.app'
+        // redirectUri: 'http://localhost:8081'
     }
 };
 const msalRequest = { scopes: [] };

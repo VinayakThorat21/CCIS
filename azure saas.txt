@@ -1,0 +1,56 @@
+ngrok set-up
+
+choco install ngrok
+
+ngrok config add-authtoken 2pSPVRlzKWbQDKJtFSAXYHfCVDr_78hkte3SH3PDd8vghHpGj
+
+ngrok http http://localhost:8080
+
+------------------------------------------------------------------
+
+sabir.bedge@gcekarad.ac.in
+C^706036397708ur
+
+Microsoft entra id
+Add App Registration
+spa - http://localhost:8081
+
+client and tenant id should be used
+
+//MSAL configuration
+const msalConfig = {
+    auth: {
+        clientId: 'clientId',
+        // comment out if you use a multi-tenant AAD app
+        authority: 'https://login.microsoftonline.com/tenantId',
+        // redirectUri: 'https://11d1-2401-4900-5130-2a14-d56-7694-ec94-1c90.ngrok-free.app'
+        redirectUri: 'http://localhost:8081'
+    }
+};
+
+-----------------------------------------------------------------
+
+Use forwarding URI from ngrok
+
+//MSAL configuration
+const msalConfig = {
+    auth: {
+        clientId: 'c8a16b2a-445e-444d-8941-9b1e59e3ca16',
+        // comment out if you use a multi-tenant AAD app
+        authority: 'https://login.microsoftonline.com/common', // Make it common
+        redirectUri: 'https://3141-2401-4900-5130-2a14-d56-7694-ec94-1c90.ngrok-free.app' // ngrok URI
+        // redirectUri: 'http://localhost:8081'
+    }
+};
+
+--------------------------------------------------------------------
+
+Go to redirect URIs on the same page
+
+Use ngrok URI
+Support account types: Multitenant
+
+---------------------------------------------------------------------
+
+npm start
+
